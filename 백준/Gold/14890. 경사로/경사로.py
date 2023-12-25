@@ -1,96 +1,35 @@
 import sys
-
 input = sys.stdin.readline
 
+def sol(start):
+    for i in range(1, n):
+        # 높이 차 2 이상인 것 만나면 바로 컷
+        if abs(start[i]-start[i-1]) >= 2:
+            return 0
+        if start[i] < start[i-1]:
+            for k in range(l):
+                if i+k >= n or check[i+k] or start[i] != start[i+k]:
+                    return 0
+                check[i+k] = 1
+        elif start[i] > start[i-1]:
+            for k in range(l):
+                if i-k-1 < 0 or start[i-1] != start[i-k-1] or check[i-k-1]:
+                    return 0
+                check[i-k-1] = 1
+    return 1
+
 n, l = map(int, input().split())
-field = [list(map(int, input().split())) for _ in range(n)]
+arr = [list(map(int, input().split())) for _ in range(n)]
+res = 0
 
-ans = 0
+for i in range(n):
+    check = [0 for _ in range(n)]
+    if sol(arr[i]):
+        res += 1
 
-for h in range(n):
-    streak = 0
-    resolve = False
-    height = field[h][0]
-    
-    for w in range(n):
-        if (new_height := field[h][w]) == height:
-            streak += 1
-            
-            if streak >= l\
-                    and resolve:
-                resolve = False
-                streak = 0
-        
-        elif resolve:
-            break
+for i in range(n):
+    check = [0 for _ in range(n)]
+    if sol([arr[j][i] for j in range(n)]):
+        res += 1
 
-        else:
-            diff_height = new_height - height
-            
-            # 높아질 때
-            if diff_height == 1:
-                if streak < l:
-                    break
-            # 낮아질 때
-            elif diff_height == -1:
-                resolve = True
-            # 높이가 2이상 변할 때
-            else:
-                break
-            
-            if resolve\
-                    and l == 1:
-                streak = 0
-                resolve = False
-            else:
-                streak = 1
-            height = new_height
-
-    else:
-        if not resolve:
-            ans += 1
-
-
-for w in range(n):
-    streak = 0
-    resolve = False
-    height = field[0][w]
-    
-    for h in range(n):
-        if (new_height := field[h][w]) == height:
-            streak += 1
-            
-            if streak >= l\
-                    and resolve:
-                resolve = False
-                streak = 0
-        
-        elif resolve:
-            break
-
-        else:
-            diff_height = new_height - height
-            
-            # 높아질 때
-            if diff_height == 1:
-                if streak < l:
-                    break
-            # 낮아질 때
-            elif diff_height == -1:
-                resolve = True
-            # 높이가 2이상 변할 때
-            else:
-                break
-
-            if resolve\
-                    and l == 1:
-                streak = 0
-                resolve = False
-            else:
-                streak = 1
-            height = new_height
-    else:
-        if not resolve:
-            ans += 1
-
-print(ans)
+print(res)
