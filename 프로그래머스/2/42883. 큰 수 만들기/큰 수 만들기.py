@@ -1,5 +1,4 @@
 def solution(number, k):
-    idx = 0
     ret = []
     
     for i in number:
